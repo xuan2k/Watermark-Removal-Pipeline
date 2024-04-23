@@ -1,0 +1,1 @@
+python3 run_metrics.py --metric all --source /data/huylx/diffusion/I2SB/dataset/image_net/clean/clean_4.png --target /data/huylx/diffusion/I2SB/dataset/image_net/recon_/recon_4.png

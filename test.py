@@ -4,18 +4,20 @@
 # @Author  : 26731
 # @File    : test_gswm.py
 # @Software: PyCharm
-import cv2
-import os
 import argparse
 import glob
+import os
+
+import cv2
+import matplotlib.image as matImage
+import matplotlib.pyplot as plt
 from torch.autograd import Variable
+
 from models import HN
 from utils import *
-import matplotlib.pyplot as plt
-import matplotlib.image as matImage
 
 # os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 import os
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"

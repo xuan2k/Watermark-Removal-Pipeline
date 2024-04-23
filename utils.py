@@ -1,18 +1,17 @@
 import math
+import random
 import string
 
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
 import torch
 import torch.nn as nn
-import numpy as np
-import cv2
+from PIL import Image
 # from skimage.measure.simple_metrics import compare_psnr
 from skimage.metrics import mean_squared_error as compare_mse
 from skimage.metrics import peak_signal_noise_ratio as compare_psnr
 from skimage.metrics import structural_similarity as compare_ssim
-import random
-
-from PIL import Image
-import matplotlib.pyplot as plt
 
 
 def weights_init_kaiming(m):
@@ -40,7 +39,8 @@ def batch_SSIM(img, imclean, data_range):
     Img = img.data.cpu().numpy().astype(np.float32)
     Iclean = imclean.data.cpu().numpy().astype(np.float32)
     SSIM = 0
-    Img = np.transpose(Img, (0, 2, 3, 1))
+    # B C H W
+    Img = np.transpose(Img, (0, 2, 3, 1)) #B H W C
     Iclean = np.transpose(Iclean, (0, 2, 3, 1))
     # print(Iclean.shape)
     for i in range(Img.shape[0]):
@@ -69,7 +69,8 @@ def add_watermark_noise(img_train, occupancy=50, self_surpervision=False, same_r
     # Noise2Noise要确保类标和输入的水印为同一张
     if self_surpervision:
         random_img = same_random
-    data_path = "watermark/translucence/"
+    data_path = "datasets/watermark/"
+    # data_path = "watermark/translucence/"
     watermark = Image.open(data_path + str(random_img) + ".png")
     watermark = watermark.convert("RGBA")
     w, h = watermark.size
@@ -132,7 +133,7 @@ def add_watermark_noise(img_train, occupancy=50, self_surpervision=False, same_r
             sum = (img_cnt > 0).sum()
             ratio = img_w * img_h * occupancy / 100
             if sum > ratio:
-                img_rgb = np.array(tmp).astype(np.float) / 255.
+                img_rgb = np.array(tmp).astype(np.float64) / 255.
                 img_train[i] = img_rgb[:, :, [0, 1, 2]]
                 break
     img_train = np.transpose(img_train, (0, 3, 1, 2))
@@ -299,6 +300,7 @@ def add_watermark_noise_test(img_train, occupancy=50, img_id=3, scale_img=1.5, s
 
 
 import torchvision.models as models
+
 from models import VGG16
 
 
@@ -359,4 +361,4 @@ import yaml
 # get configs
 def get_config(config):
     with open(config, 'r') as stream:
-        return yaml.load(stream)
+        return yaml.safe_load(stream)

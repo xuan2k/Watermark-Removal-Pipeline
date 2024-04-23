@@ -1,14 +1,16 @@
+import glob
 import os
 import os.path
-import numpy as np
 import random
-import h5py
-import torch
+
 import cv2
-import glob
+import h5py
+import numpy as np
+import torch
 import torch.utils.data as udata
-from utils import data_augmentation
 from PIL import Image
+
+from utils import data_augmentation
 
 
 def normalize(data):
